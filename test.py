@@ -30,3 +30,4 @@ test_t = np.loadtxt(path + "test/y_test.txt")
 test_s = np.loadtxt(path + "test/subject_test.txt")
 
 print(train_ax)
+print(train_ay)
