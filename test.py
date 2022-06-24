@@ -28,4 +28,3 @@ test_az = mmscaler.fit_transform(np.loadtxt(path + "test/Inertial Signals/total_
 
 test_t = np.loadtxt(path + "test/y_test.txt")
 test_s = np.loadtxt(path + "test/subject_test.txt")
-
