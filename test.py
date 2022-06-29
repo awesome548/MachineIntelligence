@@ -132,8 +132,8 @@ class MyLSTM(nn.Module):
         c_1 = torch.zeros(1, x.size(0), self.hidden_size_2).to(device)
         out, (h_out, c_out) = self.lstm_1(x, (h_0, c_0))
         _, (h_out, _) = self.lstm_2(out, (h_1, c_1))
-        h_out = h_out.view(-1, self.hidden_size_2)
         h_out = self.relu(h_out)
+        h_out = h_out.view(-1, self.hidden_size_2)
         y_hat = self.linear(h_out)
         return y_hat
 
@@ -149,6 +149,11 @@ class DataSet:
 
 dataset = DataSet()
 dataloader = torch.utils.data.DataLoader(dataset,batch_size=128,shuffle=True, drop_last=True)
+
+
+"""
+PREPROCECCING
+"""
 
 def train(model, optimizer, X, t):
   model.train()
