@@ -163,7 +163,7 @@ loss = []
 
 def main():
         model = MyLSTM()
-        optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+        optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
         model = model.to(device)
         for epoch in range(200):
                 for X, t in dataloader:
@@ -180,7 +180,7 @@ def predict(model):
         train_predict = model(testX)
         
         data_predict = torch.argmax(train_predict, dim=-1)
-        data_predict = F.one_hot(data_predict, num_classes=-1)
+        data_predict = F.one_hot(data_predict, num_classes)
 
 predict(model)
 
