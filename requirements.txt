@@ -1,6 +1,6 @@
 # general requirements
-pandas
 numpy
-sklearn
-torch
+wheel
+torchinfo
+pytorch-ignite
 matplotlib
