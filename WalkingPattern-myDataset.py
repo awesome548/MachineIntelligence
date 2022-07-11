@@ -59,8 +59,8 @@ print(train_subject, test_subject)
 DATA LOADING
 """
 for i in range(subject_num):
-    f = open(path + "person_00" + str(i) + ".csv")
-    f_o = open(path + "person_00" + str(i) + "_out.csv", "w")
+    f = open(path + "person_" + str(i).zfill(3) + ".csv")
+    f_o = open(path + "person_" + str(i).zfill(3) + "_out.csv", "w")
 
     line = f.readline()
     while line:
@@ -74,7 +74,7 @@ print("Dataset Size")
 #scale data set
 data = []
 for i in range(subject_num):
-    load = np.loadtxt(path + "person_00" + str(i) + "_out.csv", delimiter=",", skiprows=100)
+    load = np.loadtxt(path + "person_" + str(i).zfill(3) + "_out.csv", delimiter=",", skiprows=100)
     load = load[:,1:7]
 
     preData = np.zeros((int(len(load) / seq_len), seq_len, input_size), float)
