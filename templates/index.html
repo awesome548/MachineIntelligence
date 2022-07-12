@@ -9,6 +9,9 @@
       <span id="y">0</span>
       <span id="z">0</span>
     </div>
+    <p>
+      <span id="result">0</span>
+    </p>
     <script>
       var array_x, array_y, array_z = [];
       var count = 0;
@@ -22,9 +25,6 @@
                     alert('event.accelerationIncludingGravity is null');
                     return;
                   }
-                  document.getElementById('x').innerHTML = event.accelerationIncludingGravity.x;
-                  document.getElementById('y').innerHTML = event.accelerationIncludingGravity.y;
-                  document.getElementById('z').innerHTML = event.accelerationIncludingGravity.z;
                   if (count < 128) {
                     array_x.push(event.accelerationIncludingGravity.x);
                     array_y.push(event.accelerationIncludingGravity.y);
@@ -32,7 +32,20 @@
                     count += 1;
                   } else {
                     // Call python program here!
-
+                    document.getElementById('x').innerHTML = array_x;
+                    document.getElementById('y').innerHTML = array_y;
+                    document.getElementById('z').innerHTML = array_z;
+                    fetch('/post', {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json"},
+                      body: JSON.stringify({"x":array_x, "y":array_y, "z":array_z})
+                    }).then(
+                      response => response.json()
+                    ).then(
+                      json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
+                    ).catch(
+                      e => console.error(e)
+                    );
                     array_x = [];
                     array_y = [];
                     array_z = [];
