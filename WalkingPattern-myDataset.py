@@ -32,7 +32,7 @@ output_size = 2
 #MI detail
 hidden_size_1 = 50
 hidden_size_2 = 70
-epoch_num = 200
+epoch_num = 75
 batch = 16
 learning_rate = 0.01
 
@@ -218,7 +218,7 @@ def get_default_trainer():
 def predict(model):
   model.eval()
   train_predict = model(testX)
-
+  print(testX)
   #data_predict = train_predict.cpu().data.numpy()
   #testY_plot = testY.cpu().data.numpy()
 
@@ -235,6 +235,8 @@ def predict(model):
   print(state.metrics['cm'])
 
 model = main()
+model_path = 'model.pth'
+torch.save(model.state_dict(), model_path)
 predict(model)
 stop = len(loss)
 step = int(len(loss) / epoch_num)
