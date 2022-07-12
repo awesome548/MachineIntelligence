@@ -9,34 +9,51 @@
       <span id="y">0</span>
       <span id="z">0</span>
     </div>
+    <p>
+      <span id="result">0</span>
+    </p>
     <script>
-      var array_x, array_y, array_z = [];
-      var count = 0;
+      var once = 1;
       function deviceMotionRequest () {
+        var array_x = [];
+        var array_y = [];
+        var array_z = [];
+        let count = 0;
         if (DeviceMotionEvent.requestPermission) {
           DeviceMotionEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === 'granted') {
-                window.addEventListener("devicemotion", function (event) {
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener("devicemotion", function (event) {
                   if (!event.accelerationIncludingGravity) {
                     alert('event.accelerationIncludingGravity is null');
                     return;
                   }
-                  document.getElementById('x').innerHTML = event.accelerationIncludingGravity.x;
-                  document.getElementById('y').innerHTML = event.accelerationIncludingGravity.y;
-                  document.getElementById('z').innerHTML = event.accelerationIncludingGravity.z;
-                  if (count < 128) {
+                  document.getElementById('x').innerHTML = array_x;
+                  document.getElementById('y').innerHTML = array_y;
+                  document.getElementById('z').innerHTML = array_z;
+                  count += 1;
+                  if (count < 200) {
                     array_x.push(event.accelerationIncludingGravity.x);
                     array_y.push(event.accelerationIncludingGravity.y);
                     array_z.push(event.accelerationIncludingGravity.z);
-                    count += 1;
                   } else {
-                    // Call python program here!
-
-                    array_x = [];
-                    array_y = [];
-                    array_z = [];
-                    count = 0;
+                    fetch('/post', {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json"},
+                      body: JSON.stringify({"x":array_x, "y":array_y, "z":array_z})
+                    }).then(
+                      response => {
+                        if(response.ok){
+                          response.json()
+                        }else{
+                          throw new Error()
+                        }
+                      }
+                    ).then(
+                      json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
+                    ).catch(
+                      e => console.error(e)
+                    );
                   }
                 })
               }
@@ -49,4 +66,3 @@
     </script>
   </body>
 </html>
-Footer
