@@ -1,8 +1,10 @@
 from flask import Flask,jsonify,render_template,request
+from flask_cors import CORS
 import Predict
 import numpy as np
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
@@ -26,8 +28,9 @@ def post():
         test[i] = data[:,i]
 
     result = Predict.main(test)
-    print(result)
-    return jsonify(result)
+    
+    print(jsonify({'result':result}))
+    return jsonify({'result':result})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)

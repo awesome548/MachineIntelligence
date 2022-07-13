@@ -2,6 +2,12 @@
   <head>
     <title>DeviceMotion Test</title>
   </head>
+  <style>
+    button {
+      width: 10em;
+      height:3em;
+    }
+  </style>
   <body>
     <div>
       <button onClick="deviceMotionRequest()">Click</button>
@@ -11,80 +17,82 @@
       <span id="alpha">0</span>
       <span id="beta">0</span>
       <span id="gamma">0</span>
+      <h1 id="result"></h1>
     </div>
-    <p>
+    <!-- <p>
       <span id="result">100</span>
-    </p>
+    </p> -->
     <script>
-      function deviceMotionRequest () {
+      let count = 0;
+      let seq_len = 128;
+      let start_len = 100;
+      let end_len = seq_len + start_len;
       var acc_x = [];
       var acc_y = [];
       var acc_z = [];
       var gyr_x = [];
       var gyr_y = [];
       var gyr_z = [];
-      let count = 0;
-      if (DeviceMotionEvent.requestPermission) {
-        DeviceMotionEvent.requestPermission()
-        .then(permissionState => {
-          if (permissionState === 'granted') {
-            window.addEventListener("devicemotion", function (event1) {
-              if (!event1.accelerationIncludingGravity) {
-                alert('event.accelerationIncludingGravity is null');
-                return;
-              }
-              window.addEventListener( "deviceorientation", function (event2) {
-                if (!event2.alpha) {
-                  alert('event.alpha is null');
+      function deviceMotionRequest () {
+        if (DeviceMotionEvent.requestPermission) {
+          DeviceMotionEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener("devicemotion", function (event1) {
+                if (!event1.accelerationIncludingGravity) {
+                  alert('event.accelerationIncludingGravity is null');
                   return;
                 }
-                if (count < 128) {
-                  acc_x.push(event1.accelerationIncludingGravity.x);
-                  acc_y.push(event1.accelerationIncludingGravity.y);
-                  acc_z.push(event1.accelerationIncludingGravity.z);
-                  gyr_x.push(event2.alpha);
-                  gyr_y.push(event2.beta);
-                  gyr_z.push(event2.gamma);
-                  // document.getElementById('x').innerHTML = acc_x;
-                  // document.getElementById('y').innerHTML = acc_y;
-                  // document.getElementById('z').innerHTML = acc_z;
-                  // document.getElementById('alpha').innerHTML = gyr_x;
-                  // document.getElementById('beta').innerHTML = gyr_y;
-                  // document.getElementById('gamma').innerHTML = gyr_z;
+                window.addEventListener( "deviceorientation", function (event2) {
+                  if (!event2.alpha) {
+                    alert('event.alpha is null');
+                    return;
+                  }
                   count += 1;
-                } else {
-                  fetch('/post', {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json"},
-                    body: JSON.stringify({"x":acc_x, "y":acc_y, "z":acc_z, "alpha":gyr_x, "beta":gyr_y, "gamma":gyr_z})
-                  }).then(
-                    response => {
-                    if(response.ok){
-                      response.json()
-                    }else{
-                      throw new Error()
-                    }
-                  }).then(
-                    json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
-                  ).catch(
-                    e => console.error(e)
-                  );
-                  acc_x = [];
-                  acc_y = [];
-                  acc_z = [];
-                  gyr_x = [];
-                  gyr_y = [];
-                  gyr_z = [];
-                  count = 0;
-                }
+                  if(start_len <= count &&  count < end_len) {
+                    acc_x.push(event1.accelerationIncludingGravity.x);
+                    acc_y.push(event1.accelerationIncludingGravity.y);
+                    acc_z.push(event1.accelerationIncludingGravity.z);
+                    gyr_x.push(event2.alpha);
+                    gyr_y.push(event2.beta);
+                    gyr_z.push(event2.gamma);
+                    document.getElementById('x').innerHTML = acc_x;
+                    document.getElementById('y').innerHTML = acc_y;
+                    document.getElementById('z').innerHTML = acc_z;
+                    document.getElementById('alpha').innerHTML = gyr_x;
+                    document.getElementById('beta').innerHTML = gyr_y;
+                    document.getElementById('gamma').innerHTML = gyr_z;
+                  }else if(count == end_len){
+                    fetch('/post', {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json"},
+                      body: JSON.stringify({"x":acc_x, "y":acc_y, "z":acc_z, "alpha":gyr_x, "beta":gyr_y, "gamma":gyr_z})
+                    }).then(
+                      console.log("POST SUCCESS")
+                    ).then(
+                      function(response) {
+                        response.json().then(
+                          function(json){
+                            console.log(json['result'])
+                            document.getElementById('result').innerHTML = json['result'];
+                          }
+                        )
+                      }
+                    ).catch(
+                      e => console.error(e)
+                    );
+                    permissionState = "";
+                    return;
+                  }else{
+                    return;
+                  }
+                })
               })
-            })
-          }
-        }).catch(console.error);
-      } else {
-        alert('DeviceMotionEvent.requestPermission is not found')
-      }
-      }  
+            }
+          }).catch(console.error);
+        } else {
+          alert('DeviceMotionEvent.requestPermission is not found')
+        }}
     </script>
   </body>
 </html>
