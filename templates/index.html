@@ -45,12 +45,12 @@
                   gyr_x.push(event2.alpha);
                   gyr_y.push(event2.beta);
                   gyr_z.push(event2.gamma);
-                  document.getElementById('x').innerHTML = acc_x;
-                  document.getElementById('y').innerHTML = acc_y;
-                  document.getElementById('z').innerHTML = acc_z;
-                  document.getElementById('alpha').innerHTML = gyr_x;
-                  document.getElementById('beta').innerHTML = gyr_y;
-                  document.getElementById('gamma').innerHTML = gyr_z;
+                  // document.getElementById('x').innerHTML = acc_x;
+                  // document.getElementById('y').innerHTML = acc_y;
+                  // document.getElementById('z').innerHTML = acc_z;
+                  // document.getElementById('alpha').innerHTML = gyr_x;
+                  // document.getElementById('beta').innerHTML = gyr_y;
+                  // document.getElementById('gamma').innerHTML = gyr_z;
                   count += 1;
                 } else {
                   fetch('/post', {
@@ -69,6 +69,13 @@
                   ).catch(
                     e => console.error(e)
                   );
+                  acc_x = [];
+                  acc_y = [];
+                  acc_z = [];
+                  gyr_x = [];
+                  gyr_y = [];
+                  gyr_z = [];
+                  count = 0;
                 }
               })
             })
