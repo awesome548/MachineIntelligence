@@ -8,61 +8,78 @@
       <span id="x">0</span>
       <span id="y">0</span>
       <span id="z">0</span>
+      <span id="alpha">0</span>
+      <span id="beta">0</span>
+      <span id="gamma">0</span>
     </div>
     <p>
-      <span id="result">0</span>
+      <span id="result">100</span>
     </p>
     <script>
-      var once = 1;
       function deviceMotionRequest () {
-        var array_x = [];
-        var array_y = [];
-        var array_z = [];
-        let count = 0;
-        if (DeviceMotionEvent.requestPermission) {
-          DeviceMotionEvent.requestPermission()
-          .then(permissionState => {
-            if (permissionState === 'granted') {
-              window.addEventListener("devicemotion", function (event) {
-                  if (!event.accelerationIncludingGravity) {
-                    alert('event.accelerationIncludingGravity is null');
-                    return;
+    var acc_x = [];
+    var acc_y = [];
+    var acc_z = [];
+    var gyr_x = [];
+    var gyr_y = [];
+    var gyr_z = [];
+    let count = 0;
+    if (DeviceMotionEvent.requestPermission) {
+      DeviceMotionEvent.requestPermission()
+      .then(permissionState => {
+        if (permissionState === 'granted') {
+          window.addEventListener("devicemotion", function (event1) {
+            if (!event1.accelerationIncludingGravity) {
+              alert('event.accelerationIncludingGravity is null');
+              return;
+            }
+            window.addEventListener( "deviceorientation", function (event2) {
+              if (!event2.alpha) {
+                alert('event.alpha is null');
+                return;
+              }
+              if (count < 128) {
+                acc_x.push(event1.accelerationIncludingGravity.x);
+                acc_y.push(event1.accelerationIncludingGravity.y);
+                acc_z.push(event1.accelerationIncludingGravity.z);
+                gyr_x.push(event2.alpha);
+                gyr_y.push(event2.beta);
+                gyr_z.push(event2.gamma);
+                document.getElementById('x').innerHTML = acc_x;
+                document.getElementById('y').innerHTML = acc_y;
+                document.getElementById('z').innerHTML = acc_z;
+                document.getElementById('alpha').innerHTML = gyr_x;
+                document.getElementById('beta').innerHTML = gyr_y;
+                document.getElementById('gamma').innerHTML = gyr_z;
+                count += 1;
+              } else {
+                fetch('/post', {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json"},
+                  body: JSON.stringify({"x":acc_x, "y":acc_y, "z":acc_z, "alpha":gyr_x, "beta":gyr_y, "gamma":gyr_z})
+                }).then(
+                  response => {
+                  if(response.ok){
+                    response.json()
+                  }else{
+                    throw new Error()
                   }
-                  document.getElementById('x').innerHTML = array_x;
-                  document.getElementById('y').innerHTML = array_y;
-                  document.getElementById('z').innerHTML = array_z;
-                  count += 1;
-                  if (count < 200) {
-                    array_x.push(event.accelerationIncludingGravity.x);
-                    array_y.push(event.accelerationIncludingGravity.y);
-                    array_z.push(event.accelerationIncludingGravity.z);
-                  } else {
-                    fetch('/post', {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json"},
-                      body: JSON.stringify({"x":array_x, "y":array_y, "z":array_z})
-                    }).then(
-                      response => {
-                        if(response.ok){
-                          response.json()
-                        }else{
-                          throw new Error()
-                        }
-                      }
-                    ).then(
-                      json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
-                    ).catch(
-                      e => console.error(e)
-                    );
-                  }
-                })
+                }).then(
+                  json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
+                ).catch(
+                  e => console.error(e)
+                );
               }
             })
-            .catch(console.error);
-        } else {
-          alert('DeviceMotionEvent.requestPermission is not found')
+          })
         }
-      }
+      })
+      .catch(console.error);
+  } else {
+    alert('DeviceMotionEvent.requestPermission is not found')
+  }
+}
+      
     </script>
   </body>
 </html>

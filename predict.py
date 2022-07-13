@@ -30,27 +30,19 @@ model_path = 'model.pth'
 path = "./Dataset/myData/"
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-def temp_test(bool):
-    person000 = np.loadtxt(path + "person_000.csv", delimiter=",", skiprows=50)
-    person005 = np.loadtxt(path + "person_005.csv", delimiter=",", skiprows=50)
-    d_000 = person000[:,1:7]
-    d_005 = person005[:,1:7]
-    data_000 = np.ones((int(len(d_000)/seq_len), seq_len, input_size), float)
-    data_005 = np.ones((int(len(d_005)/seq_len), seq_len, input_size), float)
-    for i in range(int(len(d_000)/seq_len)):
-        data_000[i,:,:] = d_000[i*seq_len:(i+1)*seq_len,:]
-    for i in range(int(len(d_005)/seq_len)):
-        data_005[i,:,:] = d_005[i*seq_len:(i+1)*seq_len,:]
-    test_true = torch.Tensor(np.array([data_000[400]])).to(device)
-    test_false = torch.Tensor(np.array([data_005[2]])).to(device)
-    if bool:
-        return test_true
-    else :
-        return test_false
-# argument: "owner" or "theif"
-testX = temp_test(theif)
 
+def main(data):
+    data = data[np.newaxis,:,:]
+    testX = torch.Tensor(data).to(device)
+    print(testX.shape)
 
+    model = MyLSTM()
+    model.load_state_dict(torch.load(model_path))
+    model = model.to(device)
+
+    result = predict(model, testX)
+
+    return result
 
 
 class MyLSTM(nn.Module):
@@ -78,35 +70,37 @@ class MyLSTM(nn.Module):
         #y_hat = self.softmax(h_out)
         return y_hat
 
-def main():
-  model = MyLSTM()
-  model.load_state_dict(torch.load(model_path))
-  model = model.to(device)
-  
-  return model
 
+def predict(model, test):
+    model.eval()
+    train_predict = model(test)
+    train_predict = torch.argmax(train_predict, dim=1)
+    #print(train_predict)
+    if train_predict == 0:
+        print("Owner")
+        return 0
+    else :
+        print("theif")
+        return 1
+    
 
-def predict(model):
-  model.eval()
-  train_predict = model(testX)
-  train_predict = torch.argmax(train_predict, dim=1)
-  #print(train_predict)
-  if train_predict == 0:
-    print("Owner")
-    return
-  else :
-    print("theif")
-    return 
-
-
-def program():
-
-  #print(testX.shape)
-  model = main()
-  predict(model)
-  return
-
-
+# def temp_test(bool):
+#     person000 = np.loadtxt(path + "person_000.csv", delimiter=",", skiprows=50)
+#     person005 = np.loadtxt(path + "person_005.csv", delimiter=",", skiprows=50)
+#     d_000 = person000[:,1:7]
+#     d_005 = person005[:,1:7]
+#     data_000 = np.ones((int(len(d_000)/seq_len), seq_len, input_size), float)
+#     data_005 = np.ones((int(len(d_005)/seq_len), seq_len, input_size), float)
+#     for i in range(int(len(d_000)/seq_len)):
+#         data_000[i,:,:] = d_000[i*seq_len:(i+1)*seq_len,:]
+#     for i in range(int(len(d_005)/seq_len)):
+#         data_005[i,:,:] = d_005[i*seq_len:(i+1)*seq_len,:]
+#     test_true = torch.Tensor(np.array([data_000[400]])).to(device)
+#     test_false = torch.Tensor(np.array([data_005[2]])).to(device)
+#     if bool:
+#         return test_true
+#     else :
+#         return test_false
 """
 stop = len(loss)
 step = int(len(loss) / epoch_num)
