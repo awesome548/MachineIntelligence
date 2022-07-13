@@ -1,5 +1,5 @@
 from flask import Flask,jsonify,render_template,request
-import predict
+import Predict
 import numpy as np
 
 app = Flask(__name__)
@@ -21,11 +21,11 @@ def post():
     data = np.vstack([x, y, z, alpha, beta, gamma])
     print(data.shape)
 
-    test = np.zeros((predict.seq_len, predict.input_size))
-    for i in range(predict.seq_len):
+    test = np.zeros((Predict.seq_len, Predict.input_size))
+    for i in range(Predict.seq_len):
         test[i] = data[:,i]
 
-    result = predict.main(test)
+    result = Predict.main(test)
 
     return jsonify(result)
 
