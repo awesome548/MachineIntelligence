@@ -59,7 +59,7 @@ print(train_subject, test_subject)
 DATA LOADING
 """
 for i in range(subject_num):
-    f = open(path + "person_" + str(i).zfill(3) + "out.csv")
+    f = open(path + "person_" + str(i).zfill(3) + ".csv")
     f_o = open(path + "person_" + str(i).zfill(3) + "_out.csv", "w")
 
     line = f.readline()
@@ -96,6 +96,7 @@ for i in test_subject:
     teX = np.vstack([teX, data[i][:test_size // len(test_subject)]])
 
 teY = np.hstack([np.zeros(test_size, int), np.ones(test_size, int)])
+
 #print(trX.shape)
 #print(teX.shape)
 #print(trY.shape)
