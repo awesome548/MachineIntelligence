@@ -1,9 +1,11 @@
 # MachineIntelligence
 
-Flask(http) -> ngrok(https) -> iphone
+**Flask(http) -> ngrok(https) -> iphone**
 
 1.build server
-$ python server.py
+
+`$ python server.py`
 
 2.connect to https
-$ ngrok http $PORT
+
+`$ ngrok http $PORT`
