@@ -72,10 +72,10 @@ def predict(model, test):
     #print(train_predict)
     if train_predict == 0:
         print("Owner")
-        return 0
+        return "Owner"
     else :
         print("theif")
-        return 1
+        return "Theif"
 
 
 def main(data):
