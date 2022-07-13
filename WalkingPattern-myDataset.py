@@ -59,7 +59,7 @@ print(train_subject, test_subject)
 DATA LOADING
 """
 for i in range(subject_num):
-    f = open(path + "person_" + str(i).zfill(3) + "_out.csv")
+    f = open(path + "person_" + str(i).zfill(3) + "out.csv")
     f_o = open(path + "person_" + str(i).zfill(3) + "_out.csv", "w")
 
     line = f.readline()
@@ -75,8 +75,7 @@ print("Dataset Size")
 data = []
 for i in range(subject_num):
     load = np.loadtxt(path + "person_" + str(i).zfill(3) + "_out.csv", delimiter=",", skiprows=100)
-    print(load)
-    load = load[1:7]
+    load = load[:,1:7]
 
     preData = np.zeros((int(len(load) / seq_len), seq_len, input_size), float)
     for j in range(int(len(load) / seq_len)):
@@ -97,7 +96,6 @@ for i in test_subject:
     teX = np.vstack([teX, data[i][:test_size // len(test_subject)]])
 
 teY = np.hstack([np.zeros(test_size, int), np.ones(test_size, int)])
-print(teX.shape())
 #print(trX.shape)
 #print(teX.shape)
 #print(trY.shape)
@@ -247,7 +245,7 @@ def predict(model):
 
 model = main()
 model_path = 'model.pth'
-#torch.save(model.state_dict(), model_path)
+torch.save(model.state_dict(), model_path)
 predict(model)
 
 """
