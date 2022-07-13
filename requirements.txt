@@ -4,3 +4,6 @@ wheel
 torchinfo
 pytorch-ignite
 matplotlib
+#server
+flask
+flask_cors

@@ -17,6 +17,7 @@
       <span id="alpha">0</span>
       <span id="beta">0</span>
       <span id="gamma">0</span>
+      <h1 id="result"></h1>
     </div>
     <!-- <p>
       <span id="result">100</span>
@@ -67,19 +68,23 @@
                       headers: { "Content-Type": "application/json"},
                       body: JSON.stringify({"x":acc_x, "y":acc_y, "z":acc_z, "alpha":gyr_x, "beta":gyr_y, "gamma":gyr_z})
                     }).then(
-                      response => {
-                      if(response.ok){
-                        response.json()
-                      }else{
-                        throw new Error()
+                      console.log("POST SUCCESS")
+                    ).then(
+                      function(response) {
+                        response.json().then(
+                          function(json){
+                            console.log(json['result'])
+                            document.getElementById('result').innerHTML = json['result'];
+                          }
+                        )
                       }
-                    }).then(
-                      json => { document.getElementById("result").innerHTML += JSON.stringify(json); }
                     ).catch(
                       e => console.error(e)
                     );
+                    permissionState = "";
+                    return;
                   }else{
-                    document.getElementById('result').innerHTML = "failed"
+                    return;
                   }
                 })
               })
@@ -87,8 +92,7 @@
           }).catch(console.error);
         } else {
           alert('DeviceMotionEvent.requestPermission is not found')
-        }
-        }  
+        }}
     </script>
   </body>
 </html>
