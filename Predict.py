@@ -1,3 +1,6 @@
+"""
+Liburary Set
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
@@ -6,7 +9,9 @@ import torch.nn.functional as F
 from sklearn.preprocessing import MinMaxScaler
 from torchinfo import summary
 
-
+"""
+SCALE DATA
+"""
 train_person = 0 # 0 = kikuzo, 1 = amaya, 2 = rinto
 subject_num = 8
 test_num = 2
@@ -24,27 +29,16 @@ epoch_num = 75
 batch = 16
 learning_rate = 0.01
 
+#OTHERS
 owner = True
 theif = False
 model_path = 'model.pth'
 path = "./Dataset/myData/"
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-
-def main(data):
-    data = data[np.newaxis,:,:]
-    testX = torch.Tensor(data).to(device)
-    print(testX.shape)
-
-    model = MyLSTM()
-    model.load_state_dict(torch.load(model_path))
-    model = model.to(device)
-
-    result = predict(model, testX)
-
-    return result
-
-
+"""
+MI architecture
+"""
 class MyLSTM(nn.Module):
     def __init__(self):
         super().__init__()
@@ -82,25 +76,22 @@ def predict(model, test):
     else :
         print("theif")
         return 1
-    
 
-# def temp_test(bool):
-#     person000 = np.loadtxt(path + "person_000.csv", delimiter=",", skiprows=50)
-#     person005 = np.loadtxt(path + "person_005.csv", delimiter=",", skiprows=50)
-#     d_000 = person000[:,1:7]
-#     d_005 = person005[:,1:7]
-#     data_000 = np.ones((int(len(d_000)/seq_len), seq_len, input_size), float)
-#     data_005 = np.ones((int(len(d_005)/seq_len), seq_len, input_size), float)
-#     for i in range(int(len(d_000)/seq_len)):
-#         data_000[i,:,:] = d_000[i*seq_len:(i+1)*seq_len,:]
-#     for i in range(int(len(d_005)/seq_len)):
-#         data_005[i,:,:] = d_005[i*seq_len:(i+1)*seq_len,:]
-#     test_true = torch.Tensor(np.array([data_000[400]])).to(device)
-#     test_false = torch.Tensor(np.array([data_005[2]])).to(device)
-#     if bool:
-#         return test_true
-#     else :
-#         return test_false
+
+def main(data):
+    data = data[np.newaxis,:,:]
+    testX = torch.Tensor(data).to(device)
+    print(testX.shape)
+
+    model = MyLSTM()
+    model.load_state_dict(torch.load(model_path))
+    model = model.to(device)
+
+    result = predict(model, testX)
+
+    return result
+
+
 """
 stop = len(loss)
 step = int(len(loss) / epoch_num)

@@ -116,6 +116,10 @@ trY = trainY.cpu().data.numpy()
 #testY one-hot ni sinai!
 print('trainY.shape:{0}'.format(trainY.shape))
 
+"""
+DATA CLASS DEFINITION
+"""
+
 class DataSet:
     def __init__(self):
         self.X = trX.astype(np.float32) # 入力
@@ -134,6 +138,12 @@ dataset = DataSet()
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch, \
                                          shuffle=True, drop_last=True)
 
+
+"""
+MI Architecture
+"""
+
+#LSTM
 class MyLSTM(nn.Module):
     def __init__(self):
         super().__init__()
@@ -238,6 +248,10 @@ model = main()
 model_path = 'model.pth'
 torch.save(model.state_dict(), model_path)
 predict(model)
+
+"""
+EVALUATION
+"""
 stop = len(loss)
 step = int(len(loss) / epoch_num)
 plt.plot(loss[0:stop:step], '.', label = "test_error")

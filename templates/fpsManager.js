@@ -18,8 +18,12 @@ var PollingManager = (function (){
     }
     return bool;
   };
+
   return PollingManager;
+
 }());
+
+
 var Main = ( function (){
   var _id, _fps;
 
