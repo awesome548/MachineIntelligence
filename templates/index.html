@@ -25,6 +25,7 @@
       <span id="alpha">0</span>
       <span id="beta">0</span>
       <span id="gamma">0</span>
+      <h1 id="walk"></h1>
       <h1 id="result"></h1>
     </div>
     <!-- <p>
@@ -33,7 +34,7 @@
     <script>
       let count = 0;
       let seq_len = 128;
-      let start_len = 100;
+      let start_len = 40000;
       let end_len = seq_len + start_len;
       var acc_x = [];
       var acc_y = [];
@@ -86,6 +87,7 @@
                           function(json){
                             console.log(json['result'])
                             document.getElementById('result').innerHTML = json['result'];
+                            document.getElementById('walk').innerHTML = json['walk'];
                           }
                         )
                       }
@@ -93,6 +95,13 @@
                       e => console.error(e)
                     );
                     permissionState = "";
+                    acc_x = [];
+                    acc_y = [];
+                    acc_z = [];
+                    gyr_x = [];
+                    gyr_y = [];
+                    gyr_z = [];
+                    count = 0;
                     return;
                   }else{
                     return;
