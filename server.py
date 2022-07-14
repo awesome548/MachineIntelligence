@@ -1,6 +1,7 @@
 from flask import Flask,jsonify,render_template,request
 from flask_cors import CORS
 import Predict
+import Walk
 import numpy as np
 
 app = Flask(__name__)
@@ -27,10 +28,13 @@ def post():
     for i in range(Predict.seq_len):
         test[i] = data[:,i]
 
+    walk = Walk.main(test)
     result = Predict.main(test)
-    
-    print(jsonify({'result':result}))
-    return jsonify({'result':result})
+
+    if(walk == "Walking"):
+        print(jsonify({'walk':walk}))
+        print(jsonify({'result':result}))
+    return jsonify({'result':result,'walk':walk})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

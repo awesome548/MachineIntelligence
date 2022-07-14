@@ -20,7 +20,7 @@ input_size = 6
 train_size = 350
 test_size = 100
 test_minisize = 50
-output_size = 2
+output_size = 6
 
 #MI detail
 hidden_size_1 = 50
@@ -32,7 +32,7 @@ learning_rate = 0.01
 #OTHERS
 owner = True
 theif = False
-model_path = 'model.pth'
+model_path = 'walkDetectModel.pth'
 path = "./Dataset/myData/"
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -71,11 +71,11 @@ def predict(model, test):
     train_predict = torch.argmax(train_predict, dim=1)
     #print(train_predict)
     if train_predict == 0:
-        #print("Owner")
-        return "Owner"
+        print("Walking")
+        return "Walking"
     else :
-        #print("theif")
-        return "Theif"
+        #print("Not walking")
+        return "Not walking"
 
 
 def main(data):
