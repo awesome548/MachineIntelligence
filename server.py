@@ -21,7 +21,7 @@ def post():
     beta = np.array(req["beta"])
     gamma = np.array(req["gamma"])
     data = np.vstack([x, y, z, alpha, beta, gamma])
-    print(data.shape)
+
 
     test = np.zeros((Predict.seq_len, Predict.input_size))
     for i in range(Predict.seq_len):
@@ -33,4 +33,4 @@ def post():
     return jsonify({'result':result})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
