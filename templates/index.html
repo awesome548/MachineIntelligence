@@ -11,9 +11,17 @@
   <body>
     <div>
       <button onClick="deviceMotionRequest()">Click</button>
+    </div>
+    <div>
       <span id="x">0</span>
       <span id="y">0</span>
       <span id="z">0</span>
+    <div>
+      <span id="alpha">0</span>
+      <span id="beta">0</span>
+      <span id="gamma">0</span>
+    </div>
+    <div>
       <span id="alpha">0</span>
       <span id="beta">0</span>
       <span id="gamma">0</span>
@@ -50,15 +58,18 @@
                   }
                   count += 1;
                   if(start_len <= count &&  count < end_len) {
-                    acc_x.push(event1.accelerationIncludingGravity.x);
-                    acc_y.push(event1.accelerationIncludingGravity.y);
-                    acc_z.push(event1.accelerationIncludingGravity.z);
+                    a = event1.accelerationIncludingGravity.x
+                    b = event1.accelerationIncludingGravity.y
+                    c = event1.accelerationIncludingGravity.z
+                    acc_x.push(a);
+                    acc_y.push(b);
+                    acc_z.push(c);
                     gyr_x.push(event2.alpha);
                     gyr_y.push(event2.beta);
                     gyr_z.push(event2.gamma);
-                    document.getElementById('x').innerHTML = acc_x;
-                    document.getElementById('y').innerHTML = acc_y;
-                    document.getElementById('z').innerHTML = acc_z;
+                    document.getElementById('x').innerHTML = a;
+                    document.getElementById('y').innerHTML = b;
+                    document.getElementById('z').innerHTML = c;
                     document.getElementById('alpha').innerHTML = gyr_x;
                     document.getElementById('beta').innerHTML = gyr_y;
                     document.getElementById('gamma').innerHTML = gyr_z;
