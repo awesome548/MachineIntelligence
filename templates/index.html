@@ -1,32 +1,40 @@
 <html>
   <head>
     <title>DeviceMotion Test</title>
-  </head>
-  <style>
-    button {
-      width: 10em;
-      height:3em;
+    <style>
+    body {
+      background-color: slategray;
     }
-  </style>
+    #button {
+      width: 500px;
+      height:60px;
+      font-size: 40px;
+    }
+    .value {
+      font-size: 25px;
+    }
+    </style>
+  </head>
   <body>
     <div>
-      <button onClick="deviceMotionRequest()">Click</button>
+      <button id="button" onClick="deviceMotionRequest()">Click to start</button>
     </div>
     <div>
-      <span id="x">0</span>
-      <span id="y">0</span>
-      <span id="z">0</span>
-    <div>
-      <span id="alpha">0</span>
-      <span id="beta">0</span>
-      <span id="gamma">0</span>
+      <h1>Acceleration</h1>
+      <span class="value" id="x">0</span>
+      <span class="value" id="y">0</span>
+      <span class="value" id="z">0</span>
     </div>
     <div>
-      <span id="alpha">0</span>
-      <span id="beta">0</span>
-      <span id="gamma">0</span>
-      <h1 id="walk"></h1>
-      <h1 id="result"></h1>
+      <h1>Gyro</h1>
+      <span class="value" id="alpha">0</span>
+      <span class="value" id="beta">0</span>
+      <span class="value" id="gamma">0</span>
+    </div>
+    <div>
+      <h1>Result</h1>
+      <h2 id="walk"></h2>
+      <h2 id="result"></h2>
     </div>
     <!-- <p>
       <span id="result">100</span>
@@ -34,7 +42,7 @@
     <script>
       let count = 0;
       let seq_len = 128;
-      let start_len = 40000;
+      let start_len = 3000;
       let end_len = seq_len + start_len;
       var acc_x = [];
       var acc_y = [];
@@ -62,18 +70,21 @@
                     a = event1.accelerationIncludingGravity.x
                     b = event1.accelerationIncludingGravity.y
                     c = event1.accelerationIncludingGravity.z
+                    d = event2.alpha
+                    e = event2.beta
+                    f = event2.gamma
                     acc_x.push(a);
                     acc_y.push(b);
                     acc_z.push(c);
-                    gyr_x.push(event2.alpha);
-                    gyr_y.push(event2.beta);
-                    gyr_z.push(event2.gamma);
+                    gyr_x.push(d);
+                    gyr_y.push(e);
+                    gyr_z.push(f);
                     document.getElementById('x').innerHTML = a;
                     document.getElementById('y').innerHTML = b;
                     document.getElementById('z').innerHTML = c;
-                    document.getElementById('alpha').innerHTML = gyr_x;
-                    document.getElementById('beta').innerHTML = gyr_y;
-                    document.getElementById('gamma').innerHTML = gyr_z;
+                    document.getElementById('alpha').innerHTML = d;
+                    document.getElementById('beta').innerHTML = e;
+                    document.getElementById('gamma').innerHTML = f;
                   }else if(count == end_len){
                     fetch('/post', {
                       method: "POST",
