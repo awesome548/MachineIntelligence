@@ -35,8 +35,7 @@ def post():
         print(jsonify({'walk':walk}))
         print(jsonify({'result':result}))
         return jsonify({'result':result,'walk':walk})
-
-    return jsonify({'result':"-----",'walk':walk})
+    return jsonify({'result':"---",'walk':walk})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

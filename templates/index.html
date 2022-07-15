@@ -1,48 +1,52 @@
 <html>
   <head>
-    <title>DeviceMotion Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Walk Pattern Detect</title>
     <style>
-    body {
-      background-color: slategray;
-    }
-    #button {
-      width: 500px;
-      height:60px;
-      font-size: 40px;
-    }
-    .value {
-      font-size: 25px;
-    }
+      body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+      .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+      .fa-anchor,.fa-coffee {font-size:200px}
+      /* #button {
+        width: 500px;
+        height:60px;
+        font-size: 40px;
+      } */
+      .value {
+        font-size: 25px;
+      }
     </style>
   </head>
   <body>
-    <div>
-      <button id="button" onClick="deviceMotionRequest()">Click to start</button>
+    <header class="w3-container w3-red w3-center">
+      <h1>WALKING PATTERN DETECTION</h1>
+      <p class="w3-xlarge">team 18</p>
+      <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" id="button" onClick="deviceMotionRequest()">Get Started</button>
+    </header>
+    <!-- First Grid -->
+    <div class="w3-row-padding w3-padding-64 w3-container w3-center">
+      <div class="w3-content">
+          <h1>Acceleration</h1>
+          <span class="value" id="x">0</span>
+          <span class="value" id="y">0</span>
+          <span class="value" id="z">0</span>
+          <h1>Gyro</h1>
+          <span class="value" id="alpha">0</span>
+          <span class="value" id="beta">0</span>
+          <span class="value" id="gamma">0</span>        
+          <h1>Result</h1>
+          <h2 id="walk"></h2>
+          <h2 id="result"></h2>
+      </div>
     </div>
-    <div>
-      <h1>Acceleration</h1>
-      <span class="value" id="x">0</span>
-      <span class="value" id="y">0</span>
-      <span class="value" id="z">0</span>
-    </div>
-    <div>
-      <h1>Gyro</h1>
-      <span class="value" id="alpha">0</span>
-      <span class="value" id="beta">0</span>
-      <span class="value" id="gamma">0</span>
-    </div>
-    <div>
-      <h1>Result</h1>
-      <h2 id="walk"></h2>
-      <h2 id="result"></h2>
-    </div>
-    <!-- <p>
-      <span id="result">100</span>
-    </p> -->
     <script>
       let count = 0;
       let seq_len = 128;
-      let start_len = 3000;
+      let start_len = 40000;
       let end_len = seq_len + start_len;
       var acc_x = [];
       var acc_y = [];
